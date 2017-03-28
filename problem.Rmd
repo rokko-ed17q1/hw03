@@ -1,0 +1,323 @@
+---
+title: 'Assignment 03: Vectors and matrices'
+author: 'Kenji Sato^[Kobe University. mail@kenjisato.jp]'
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  bookdown::pdf_document2:
+    fig_caption: yes
+    keep_tex: no
+    latex_engine: pdflatex
+    number_sections: yes
+    template: null
+    toc: no
+  bookdown::html_document2: default
+documentclass: scrartcl
+---
+
+# Overview
+
+## Purpose {-}
+
+To learn how to use vectors and matrices with R. Write user defined functions.
+
+## Instructions {-}
+
+In this assignment, you will
+
+- clone the assignment repository and make a working branch (eg. `solution` branch);
+- solve the problems in Section 5; 
+- write the solutions in `solution.Rmd`; 
+- commit `solution.Rmd` and `solution.pdf`; and 
+- open a Pull Request.
+
+
+# R quick course
+
+## Atomic vectors
+
+A numeric vector is a tuple of numbers. In mathematics, when we write such an expression as
+$$
+x = 
+\begin{bmatrix}
+  2.1 \\
+  1.2 \\
+  4.3
+\end{bmatrix}
+$$
+we understand that this $x$ is a vector in the three-dimensional vector space (it can be $\mathbb R^3$, $\mathbb C^3$ or $\mathbb Q^3$). 
+
+In R, we use `c()` function to concatenate the three numbers.
+```{r}
+x <- c(2.1, 1.2, 4.3)
+x
+```
+
+An object like `x` is called an atomic vector. All elements have a common type and are aligned flat and straight. 
+
+To read a value in the vector, we use the indexing operator `[`.^[This is just a R function. Try `` `r '\x60[\x60(x, 1)'` `` in the console.] Note that the index starts from 1.^[Notice that the $n$-th element of $x$ in this example has $n$ after the decimal point. I owe this idea to Hadley Wickham. See http://adv-r.had.co.nz/Subsetting.html.]
+
+```{r}
+x[1]
+```
+
+Similarly, 
+
+```{r}
+x[2]
+```
+
+We can use multiple subscripts  
+
+```{r}
+x[c(2, 3)]
+```
+
+and negative subscript
+
+```{r}
+x[-1]
+```
+
+Negative multiple subscripts works just fine but you cannot mix positive and negative subscripts.
+
+```{r, error=TRUE}
+x[c(1, -2)]
+```
+
+## Scalars
+
+In R, there is no such thing as a scalar value. A single number is a vector of size one.
+
+```{r}
+1 == c(1)
+```
+
+The following code might seem a bit awkward at first glance. 
+
+```{r}
+length(0)
+```
+
+
+## Arithmetics
+
+Addition and subtraction of two (or more) vectors with same size work as we expect. 
+
+```{r}
+y <- c(-2, -1, -4)
+x + y
+```
+
+Multiplication and division are performed element wise.
+
+```{r}
+x * y
+```
+
+## Column and row vectors
+
+In mathematics, 
+$$
+x = 
+\begin{bmatrix}
+  2.1 \\
+  1.2 \\
+  4.3
+\end{bmatrix}
+$$
+and
+$$
+x = 
+\begin{bmatrix}
+  2.1 & 1.2 & 4.3
+\end{bmatrix}
+$$
+are usually considered different. The first is called a column vector and the latter a row vector. `c(2.1, 1.2, 4.3)` doesn't have row-column distinction.
+
+To get a column vector, use `matrix()` function
+```{r}
+xcol <- matrix(x)
+xcol
+```
+
+To get a row vector, do the following
+```{r}
+xrow <- matrix(x, nrow = 1)
+xrow
+```
+
+Alternatively, you can do something like this. `t()` function returns the transpose matrix.
+
+```{r}
+t(xcol)
+```
+
+```{r, error=TRUE}
+xcol * xrow
+```
+
+```{r, error=TRUE}
+xrow * xcol
+```
+
+The `%*%` operator works as a matrix multiplication. 
+
+```{r}
+xrow %*% xcol
+```
+
+## Euclidean norm
+
+To compute the length (norm) of a vector, you can use 
+
+```{r}
+sqrt(sum(x ^ 2))
+```
+
+The above code works for row and column vectors too.
+
+```{r}
+sqrt(sum(xrow ^ 2))
+```
+
+## Matrices
+
+Column and row vectors are matrices with a single column and row, respectively. General matrices can be defined similarly.
+
+```{r}
+elm_colwise <- c(1.11, 3.21, -5.31, 2.12, -6.22, 0.32)
+matrix(elm_colwise, nrow = 3)
+```
+
+Notice that by default `matrix()` function fills elements of the passed atomic vector by column. To change this behavior, pass `byrow = TRUE` as parameter.
+
+```{r}
+elm_rowwise <- c(
+     1.11,  2.12,
+     3.21, -6.22,
+    -5.31,  0.32
+  )
+matrix(elm_rowwise, nrow = 3, byrow = TRUE)
+```
+
+Addition, subtraction and multiplication are defined for conformal matrices.
+
+```{r}
+set.seed(1)
+m1 <- matrix(rnorm(9), nrow = 3)
+m2 <- matrix(rnorm(9), nrow = 3)
+```
+
+Addition:
+
+```{r}
+m1 + m2
+```
+
+Subtraction:
+
+```{r}
+m1 - m2
+```
+
+Multiplication: 
+
+```{r}
+m1 %*% m2
+```
+
+## Comparison
+
+You must not use `==` to check if two non-integer values are identical. 
+
+While you can safely write 
+
+```{r}
+1 == 2 - 1
+```
+
+you cannot expect that the following comparison returns `TRUE`.
+
+```{r}
+0.3 == 0.1 + 0.1 + 0.1
+```
+
+When you compare decimal numbers (floating point numbers to be precise),
+alway use functions such as `all.equal()`.
+
+```{r}
+all.equal(0.3, 0.1 + 0.1 + 0.1)
+```
+
+This approach works just fine for matrices and vectors.
+
+```{r}
+all.equal(m1, m2) == TRUE
+```
+
+# Exercise 1: User defined functions
+
+If you find yourself writing an identical chuck of code over and over again, you should start writing a function. You can reduce the possibility of making bugs by abstracting common tasks because maintenance of codes becomes easier. 
+
+As an exercise, write a user defined function `norm()` to compute Euclidean norm computed above. Ensure that the following code returns the norm:
+
+```{r, eval = FALSE}
+norm(x)  #> Should return 4.933559
+```
+
+## Solution {-}
+
+```{r}
+norm <- function(x) {
+  sqrt(sum(x ^ 2))
+}
+```
+
+
+# Exercise 2: `source()` external file
+
+Start writing functions in a Rmd file is not always advisable. Since reporting is usually the final stage of your research, you want to start experimentation in a simpler and handier format. The places you might want to write your codes are files with the extension `.R`. 
+
+Look into `R/vector.R` and you can find the `norm()` function defined therein. You can use this function in `R/vector.R` by 
+
+```{r}
+source('R/vector.R')
+```
+
+and then 
+
+```{r}
+norm(x)
+```
+
+I recommend to put all `.R` files in the folder named `R` with no subfolders below.^[When you write a R package, you need to follow this rule.]
+
+\pagebreak
+
+# Problems
+
+Edit two files
+
+- `solution.Rmd`
+    - Write your name. That's it.
+- `matrix.R`
+    - Write `is_symmetric()` function that meets the specifications given below. 
+    
+and knit `solution.Rmd`. If you have a rendered PDF with no warnings, you are done. 
+Commit, push and send a Pull Request as always.
+
+## Specifications {-}
+
+Function `is_symmetric()` 
+
+- receives a square matrix `x` as the unique parameter,
+- returns `TRUE` for a length-1 vector (scalar),
+- returns `TRUE` if `x` is a symmetric matrix and `FALSE` otherwise.
+
+Although you may assume that the parameter `x` is alway square (probably because input validation is done outside of the function), you can make an extra effor to validate that `x` is really square within this function. 
+
+This function is similar to `base::isSymmetric()`.
+
+
+
+
