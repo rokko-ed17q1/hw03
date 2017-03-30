@@ -5,6 +5,8 @@ date: '`r format(Sys.time(), "%d %B, %Y")`'
 output:
   bookdown::pdf_document2:
     fig_caption: yes
+    includes:
+      in_header: asset/latex/custom.sty
     keep_tex: no
     latex_engine: pdflatex
     number_sections: yes
@@ -314,7 +316,7 @@ Function `is_symmetric()`
 - returns `TRUE` for a length-1 vector (scalar),
 - returns `TRUE` if `x` is a symmetric matrix and `FALSE` otherwise.
 
-Although you may assume that the parameter `x` is alway square (probably because input validation is done outside of the function), you can make an extra effor to validate that `x` is really square within this function. 
+Although you may assume that the parameter `x` is alway square (probably because input validation is done outside of the function), you can make an extra effort to validate that `x` is really square within this function. 
 
 This function is similar to `base::isSymmetric()`.
 
