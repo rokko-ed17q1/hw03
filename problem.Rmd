@@ -25,9 +25,9 @@ To learn how to use vectors and matrices with R. Write user defined functions.
 In this assignment, you will
 
 - clone the assignment repository and make a working branch (eg. `solution` branch);
-- solve the problems in Section 5; 
-- write the solutions in `solution.Rmd`; 
-- commit `solution.Rmd` and `solution.pdf`; and 
+- solve the problems in Section \@ref(problems); 
+- write the solutions in `R/matrix.R`, edit and knit `solution.Rmd`; 
+- commit `R/matrix.R`, `solution.Rmd` and `solution.pdf`; and 
 - open a Pull Request.
 
 
