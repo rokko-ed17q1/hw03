@@ -1,13 +1,16 @@
 # hw03: Economic Dynamics (2017Q1)
 
-公開：2017-04-17 15:00:00  
-締切：2017-04-19 18:00:00
+Publish: 2017-04-17 15:00:00
+Deadline: 2017-04-19 18:00:00
 
-## 目的
+## Goal
 
-R でベクトルと行列を扱えるようになる。
+Understand vectors and matrices in R.
 
-## 課題
+## Assignment
 
-`problem.pdf` を読み，第5節の指示通りに関数を定義してください。`solution.Rmd` を knit して警告がでなければ完了です。
+Read `problem.pdf` and follow the instruction.
 
+## Need help?
+
+If you have questions about this assignment, ask on Slack giving us the repository name, hw03. Alternatively, you can open an issue for the [base repository](https://github.com/rokko-ed17q1/hw03/issues).
