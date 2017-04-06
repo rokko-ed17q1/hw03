@@ -303,7 +303,7 @@ Edit two files
 - `solution.Rmd`
     - Write your name. That's it.
 - `matrix.R`
-    - Write `is_symmetric()` function that meets the specifications given below. 
+    - Define `is_symmetric()` function that meets the specifications given below. 
     
 and knit `solution.Rmd`. If you have a rendered PDF with no warnings, you are done. 
 Commit, push and send a Pull Request as always.
